@@ -1,7 +1,9 @@
 package com.malgwi.malgwiwallet.controller;
 
 import com.malgwi.malgwiwallet.dto.request.ConfirmationTokenRequest;
+import com.malgwi.malgwiwallet.dto.request.ResendTokenRequest;
 import com.malgwi.malgwiwallet.service.ConfirmationTokenService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,5 +24,9 @@ public class ConfirmationTokenController {
         return new ResponseEntity<>(confirmationTokenService.confirmToken(confirmationTokenRequest), HttpStatus.OK);
     }
 
+    @PostMapping("/resendToken")
+    public ResponseEntity<?> resendToken (@RequestBody ResendTokenRequest resendTokenRequest) throws MessagingException {
+        return new ResponseEntity<>(confirmationTokenService.resendToken(resendTokenRequest), HttpStatus.OK);
+    }
 
 }

@@ -54,4 +54,10 @@ public class UserServiceImpl implements UserService {
         user.setEnable(true);
         userRepository.save(user);
     }
+
+    @Override
+    public User findUserByEmail(String email) {
+        return userRepository.findUserByEmailIgnoreCase(email)
+                .orElseThrow(()-> new IllegalArgumentException("User not found"));
+    }
 }

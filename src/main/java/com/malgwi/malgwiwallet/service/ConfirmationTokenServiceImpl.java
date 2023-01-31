@@ -1,9 +1,13 @@
 package com.malgwi.malgwiwallet.service;
 
 import com.malgwi.malgwiwallet.dto.request.ConfirmationTokenRequest;
+import com.malgwi.malgwiwallet.dto.request.ResendTokenRequest;
 import com.malgwi.malgwiwallet.model.ConfirmationToken;
 import com.malgwi.malgwiwallet.model.User;
 import com.malgwi.malgwiwallet.repository.ConfirmationTokenRepository;
+import com.malgwi.malgwiwallet.repository.UserRepository;
+import com.malgwi.malgwiwallet.util.EmailSender;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +23,11 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService{
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private EmailSender emailSender;
 
     @Override
     public String confirmToken(ConfirmationTokenRequest confirmationTokenRequest) {
@@ -45,5 +54,14 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService{
         confirmationToken.setExpiredAt(LocalDateTime.now().plusMinutes(10));
         confirmationToken.setUser(user);
         confirmationTokenRepository.save(confirmationToken);
+    }
+
+    @Override
+    public String resendToken(ResendTokenRequest resendTokenRequest) throws MessagingException {
+        User user = userService.findUserByEmail(resendTokenRequest.getEmail());
+        String token = generateToken();
+        createToken(token, user);
+        emailSender.send(user.getEmail(), emailSender.buildEmail(user.getFirstName(), token));
+        return "A new token has been send to your email";
     }
 }
