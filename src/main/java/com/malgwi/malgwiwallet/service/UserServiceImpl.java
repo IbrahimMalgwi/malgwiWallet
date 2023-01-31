@@ -8,6 +8,7 @@ import com.malgwi.malgwiwallet.util.EmailSender;
 import com.malgwi.malgwiwallet.util.Validator;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -39,12 +40,18 @@ public class UserServiceImpl implements UserService {
         savedUser.setRole(Role.USER);
         userRepository.save(savedUser);
 
-        UUID token = confirmationTokenService.generateToken();
+        String token = confirmationTokenService.generateToken();
 
         confirmationTokenService.createToken(token, savedUser);
 
         emailSender.send(savedUser.getEmail(), emailSender.buildEmail(savedUser.getFirstName(), token));
 
         return "Registered Successfully";
+    }
+
+    @Override
+    public void enableUser(User user) {
+        user.setEnable(true);
+        userRepository.save(user);
     }
 }

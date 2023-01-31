@@ -6,4 +6,6 @@ import jakarta.mail.MessagingException;
 
 public interface UserService {
     String register(RegistrationRequest registrationRequest) throws MessagingException;
+
+    void enableUser(User user);
 }

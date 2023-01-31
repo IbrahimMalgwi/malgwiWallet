@@ -1,13 +1,14 @@
 package com.malgwi.malgwiwallet.service;
 
+import com.malgwi.malgwiwallet.dto.request.ConfirmationTokenRequest;
 import com.malgwi.malgwiwallet.model.ConfirmationToken;
 import com.malgwi.malgwiwallet.model.User;
 
 import java.util.UUID;
 
 public interface ConfirmationTokenService {
-    String confirmToken(ConfirmationToken confirmationToken);
-    UUID generateToken();
+    String confirmToken(ConfirmationTokenRequest confirmationTokenRequest);
+    String generateToken();
 
-    void createToken(UUID token, User user);
+    void createToken(String token, User user);
 }
