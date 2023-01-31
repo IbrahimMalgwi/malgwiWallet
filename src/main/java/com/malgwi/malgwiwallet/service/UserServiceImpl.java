@@ -1,5 +1,6 @@
 package com.malgwi.malgwiwallet.service;
 
+import com.malgwi.malgwiwallet.dto.request.LoginRequest;
 import com.malgwi.malgwiwallet.dto.request.RegistrationRequest;
 import com.malgwi.malgwiwallet.model.Role;
 import com.malgwi.malgwiwallet.model.User;
@@ -59,5 +60,15 @@ public class UserServiceImpl implements UserService {
     public User findUserByEmail(String email) {
         return userRepository.findUserByEmailIgnoreCase(email)
                 .orElseThrow(()-> new IllegalArgumentException("User not found"));
+    }
+
+    @Override
+    public String login(LoginRequest loginRequest) {
+       User user = userRepository.findUserByEmailIgnoreCase(loginRequest.getEmail())
+               .orElseThrow(()-> new IllegalArgumentException("User Dost Not Exist"));
+
+       if (!loginRequest.getPassword().equals(user.getPassword())) throw new IllegalArgumentException("Invalid login details");
+       if (!user.isEnable()) throw new IllegalArgumentException("Account is not Enable Request new OTP and Confirm");
+       return "Login Successful";
     }
 }
