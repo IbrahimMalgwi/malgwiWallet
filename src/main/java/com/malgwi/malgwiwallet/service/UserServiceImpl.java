@@ -1,5 +1,6 @@
 package com.malgwi.malgwiwallet.service;
 
+import com.malgwi.malgwiwallet.dto.request.ForgotPasswordRequest;
 import com.malgwi.malgwiwallet.dto.request.LoginRequest;
 import com.malgwi.malgwiwallet.dto.request.RegistrationRequest;
 import com.malgwi.malgwiwallet.model.Role;
@@ -70,5 +71,17 @@ public class UserServiceImpl implements UserService {
        if (!loginRequest.getPassword().equals(user.getPassword())) throw new IllegalArgumentException("Invalid login details");
        if (!user.isEnable()) throw new IllegalArgumentException("Account is not Enable Request new OTP and Confirm");
        return "Login Successful";
+    }
+
+    @Override
+    public String forgotPassword(ForgotPasswordRequest forgotPasswordRequest, Long userId) {
+        if (!Validator.isValidPassword(forgotPasswordRequest.getNewPassword())) throw new IllegalArgumentException("Wrong password format");
+        if (!forgotPasswordRequest.getConfirmPassword().equals(forgotPasswordRequest
+                .getNewPassword())) throw new IllegalArgumentException("Password does not match");
+        User user = userRepository.findById(userId).orElseThrow(()-> new RuntimeException("User does not exist"));
+        user.setPassword(forgotPasswordRequest.getNewPassword());
+        userRepository.save(user);
+
+        return "New Password Changed successfully";
     }
 }

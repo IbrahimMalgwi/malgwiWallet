@@ -1,5 +1,6 @@
 package com.malgwi.malgwiwallet.service;
 
+import com.malgwi.malgwiwallet.dto.request.ForgotPasswordRequest;
 import com.malgwi.malgwiwallet.dto.request.LoginRequest;
 import com.malgwi.malgwiwallet.dto.request.RegistrationRequest;
 import com.malgwi.malgwiwallet.model.User;
@@ -10,6 +11,7 @@ public interface UserService {
 
     void enableUser(User user);
     User findUserByEmail(String email);
-
     String login(LoginRequest loginRequest);
+
+    String forgotPassword(ForgotPasswordRequest forgotPasswordRequest, Long uerId);
 }

@@ -1,5 +1,6 @@
 package com.malgwi.malgwiwallet.controller;
 
+import com.malgwi.malgwiwallet.dto.request.ForgotPasswordRequest;
 import com.malgwi.malgwiwallet.dto.request.LoginRequest;
 import com.malgwi.malgwiwallet.dto.request.RegistrationRequest;
 import com.malgwi.malgwiwallet.service.UserService;
@@ -24,6 +25,11 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
         return new ResponseEntity<>(userService.login(loginRequest), HttpStatus.OK);
+    }
+
+    @PostMapping("/forgotPassword/{userId}")
+    public ResponseEntity<?>resetPassword(@RequestBody ForgotPasswordRequest forgotPasswordRequest, @PathVariable Long userId){
+        return new ResponseEntity<>(userService.forgotPassword(forgotPasswordRequest, userId), HttpStatus.OK);
     }
 
 }
